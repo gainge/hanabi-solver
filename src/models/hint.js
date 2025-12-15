@@ -45,6 +45,7 @@ export class Hint {
     apply(cards) {
         const description = this.getDescription();
 
+        // Step 1: Apply to affected cards
         this.affectedCards.forEach((position) => {
             const card = cards[position];
             if (!card) return;
@@ -65,6 +66,25 @@ export class Hint {
 
             card.addToHistory(description);
         });
+
+        // Step 2: Apply inverse to non-affected cards (only for affirmative hints)
+        if (!this.isNegative) {
+            const affectedSet = new Set(this.affectedCards);
+            const inverseDescription = `Excluded from ${this.value} hint`;
+
+            cards.forEach((card, index) => {
+                if (!affectedSet.has(index)) {
+                    // Apply the inverse (negative) hint
+                    if (this.type === HINT_TYPES.COLOR) {
+                        card.applyNegativeColorHint(this.value);
+                    } else if (this.type === HINT_TYPES.NUMBER) {
+                        card.applyNegativeNumberHint(this.value);
+                    }
+
+                    card.addToHistory(inverseDescription);
+                }
+            });
+        }
     }
 
     /**
