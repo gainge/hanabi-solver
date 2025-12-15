@@ -75,8 +75,11 @@ function createCardGrid(card, rainbowEnabled) {
 
     const colors = getActiveColors(rainbowEnabled);
 
-    colors.forEach((color) => {
-        NUMBERS.forEach((number, numberIndex) => {
+    // Set grid columns to match number of colors
+    grid.style.gridTemplateColumns = `repeat(${colors.length}, 1fr)`;
+
+    NUMBERS.forEach((number, numberIndex) => {
+        colors.forEach((color) => {
             const cell = document.createElement('div');
             cell.className = 'grid-cell';
             cell.dataset.color = color;

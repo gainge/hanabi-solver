@@ -52,8 +52,11 @@ function createExternalCardsGrid(rainbowEnabled) {
 
     const colors = getActiveColors(rainbowEnabled);
 
-    colors.forEach((color) => {
-        NUMBERS.forEach((number) => {
+    // Set grid columns to match number of colors
+    grid.style.gridTemplateColumns = `repeat(${colors.length}, 1fr)`;
+
+    NUMBERS.forEach((number) => {
+        colors.forEach((color) => {
             const cell = document.createElement('div');
             cell.className = 'external-card-cell';
             cell.dataset.color = color;

@@ -112,7 +112,6 @@ footer {
 /* Card grid */
 .card-grid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
     gap: 3px;
     padding: 10px;
     background-color: #f8f9fa;
@@ -195,7 +194,6 @@ footer {
 
 .external-cards-grid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
     gap: 5px;
     margin-bottom: 15px;
     padding: 10px;
