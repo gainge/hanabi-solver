@@ -116,7 +116,7 @@ function createCardGrid(card, rainbowEnabled) {
 export function updateCardPanel(panelElement, card, rainbowEnabled) {
     // Update card label and position
     const cardLabel = panelElement.querySelector('.card-label');
-    cardLabel.textContent = `${card.position + 1}`;
+    cardLabel.textContent = `#${card.position + 1}`;
     panelElement.dataset.position = card.position;
 
     // Update grid
