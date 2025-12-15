@@ -19,7 +19,7 @@ export function createCardPanel(card, rainbowEnabled) {
 
     const cardLabel = document.createElement('span');
     cardLabel.className = 'card-label';
-    cardLabel.textContent = `${card.position + 1}`;
+    cardLabel.textContent = `#${card.position + 1}`;
 
     const clearBtn = document.createElement('button');
     clearBtn.className = 'clear-btn';
@@ -93,6 +93,12 @@ function createCardGrid(card, rainbowEnabled) {
             } else {
                 cell.classList.add('disabled');
             }
+
+            // Add number label overlay
+            const numberLabel = document.createElement('div');
+            numberLabel.className = 'possibility-number';
+            numberLabel.textContent = number;
+            cell.appendChild(numberLabel);
 
             // Add a small label for accessibility
             cell.title = `${color} ${number}`;

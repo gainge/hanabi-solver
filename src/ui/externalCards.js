@@ -1,7 +1,7 @@
 // External cards UI component
 
 import {NUMBERS, COLOR_HEX} from '../utils/constants.js';
-import {getActiveColors, getCardKey, getCardDistribution} from '../utils/helpers.js';
+import {getActiveColors, getCardKey, getCardDistribution, parseCardKey} from '../utils/helpers.js';
 import {gameState} from '../state/gameState.js';
 
 let selectedCards = new Set();
@@ -47,6 +47,9 @@ export function createExternalCardsPanel(rainbowEnabled) {
  * Create the external cards grid
  */
 function createExternalCardsGrid(rainbowEnabled) {
+    // Auto-deselect any cards that became disabled
+    autoDeselectDisabledCards();
+
     const grid = document.createElement('div');
     grid.className = 'external-cards-grid';
 
@@ -65,19 +68,33 @@ function createExternalCardsGrid(rainbowEnabled) {
             const key = getCardKey(color, number);
             const seenCount = gameState.getExternalCardCount(color, number);
             const maxCount = getCardDistribution(number);
+            const isDisabled = seenCount >= maxCount;
+
+            // Apply disabled state
+            if (isDisabled) {
+                cell.classList.add('disabled');
+            }
 
             cell.style.backgroundColor = COLOR_HEX[color];
             cell.title = `${color} ${number} (${seenCount}/${maxCount})`;
 
-            // Create count indicator
+            // Create number display (main text)
+            const numberDisplay = document.createElement('div');
+            numberDisplay.className = 'card-number';
+            numberDisplay.textContent = number;
+            cell.appendChild(numberDisplay);
+
+            // Create count indicator (subtext)
             const countIndicator = document.createElement('div');
             countIndicator.className = 'count-indicator';
             countIndicator.textContent = `${seenCount}/${maxCount}`;
             cell.appendChild(countIndicator);
 
-            // Click to select/deselect
+            // Click to select/deselect (only if not disabled)
             cell.addEventListener('click', () => {
-                toggleCellSelection(cell, key);
+                if (!isDisabled) {
+                    toggleCellSelection(cell, key);
+                }
             });
 
             grid.appendChild(cell);
@@ -98,6 +115,27 @@ function toggleCellSelection(cell, cardKey) {
         selectedCards.add(cardKey);
         cell.classList.add('selected');
     }
+}
+
+/**
+ * Auto-deselect disabled cards when they become exhausted
+ */
+function autoDeselectDisabledCards() {
+    const toRemove = [];
+
+    selectedCards.forEach((cardKey) => {
+        const {color, number} = parseCardKey(cardKey);
+        const seenCount = gameState.getExternalCardCount(color, number);
+        const maxCount = getCardDistribution(number);
+
+        if (seenCount >= maxCount) {
+            toRemove.push(cardKey);
+        }
+    });
+
+    toRemove.forEach((key) => {
+        selectedCards.delete(key);
+    });
 }
 
 /**
@@ -135,8 +173,7 @@ export function updateExternalCardsPanel(panelElement, rainbowEnabled) {
     const newGrid = createExternalCardsGrid(rainbowEnabled);
     oldGrid.replaceWith(newGrid);
 
-    // Clear selection after update
-    selectedCards.clear();
+    // Note: Selection state is preserved; autoDeselectDisabledCards handles cleanup
 }
 
 /**
