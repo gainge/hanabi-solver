@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hanabi Solver</title>
+    <link rel="stylesheet" href="styles/main.css" />
+  </head>
+  <body>
+    <div class="app-container">
+      <header>
+        <h1>Hanabi Solver</h1>
+        <p class="subtitle">
+          Track possible card states based on hints and observed cards
+        </p>
+      </header>
+
+      <main>
+        <div class="left-section">
+          <!-- Card panels container -->
+          <div id="cards-container" class="cards-container"></div>
+        </div>
+
+        <div class="right-section">
+          <!-- External cards panel -->
+          <div
+            id="external-cards-container"
+            class="external-cards-container"
+          ></div>
+
+          <!-- Hint panel -->
+          <div id="hint-container" class="hint-container"></div>
+
+          <!-- Settings panel -->
+          <div id="settings-container" class="settings-container"></div>
+        </div>
+      </main>
+
+      <footer>
+        <p>Hanabi is a cooperative card game by Antoine Bauza</p>
+      </footer>
+    </div>
+
+    <script type="module" src="src/main.js"></script>
+  </body>
+</html>
